@@ -1,0 +1,11 @@
+[app/install/is_configured]
+version = 6.5.2
+modtime = 1486765879.079210000
+
+[passwords/credential%3A%3Anick.hills%40gmail.com%3A]
+version = 6.5.2
+modtime = 1486765879.030869000
+
+[indexes/tado]
+version = 6.5.2
+modtime = 1486765879.037521000
