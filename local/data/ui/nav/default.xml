@@ -1,7 +1,0 @@
-<nav search_view="search" color="#f6ab14">
-  <view name="status" default='true' />
-  <view name="system" />
-  <view name="datasets" />
-  <view name="search" />
-  
-</nav>
