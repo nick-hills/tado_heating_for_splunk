@@ -1,0 +1,1 @@
+# tado_heating_for_splunk
