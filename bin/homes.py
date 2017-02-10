@@ -1,16 +1,36 @@
 #!/usr/bin/python
 
-import urllib, urllib2, json
+import urllib, urllib2, json, sys
+import splunk.entity as entity
 
-# "https://my.tado.com/oauth/token" 
-# -d client_id=tado-webapp -d grant_type=password -d password=yourPasssword -d scope=home.user -d username=you@yourEmail.whatever 
-#  perl -pe 's/^.*"access_token"\s*:\s*"([^"]*).*/$1/' > /tmp/tadotoken
 
-tadoemail = "nick.hills@gmail.com"
-tadopassword = "kuSf4SMugtXw"
+# access the credentials in /servicesNS/nobody/app_name/admin/passwords
+def getCredentials(sessionKey):
+   myapp = 'tado'
+   try:
+      # list all credentials
+      entities = entity.getEntities(['admin', 'passwords'], namespace=myapp, owner='nobody', sessionKey=sessionKey)
+   except Exception, e:
+      raise Exception("Could not get %s credentials from splunk. Error: %s" % (myapp, str(e)))
+
+   # return first set of credentials
+   for i, c in entities.items():
+        return c['username'], c['clear_password']
+
+   raise Exception("No credentials have been found")
 
 def main():
-	token = getAuth(tadoemail, tadopassword)
+        # read session key sent from splunkd
+        sessionKey = sys.stdin.readline().strip()
+
+        if len(sessionKey) == 0:
+           sys.stderr.write("Did not receive a session key from splunkd. " +
+                            "Please enable passAuth in inputs.conf for this " +
+                            "script\n")
+           exit(2)
+
+        username, password = getCredentials(sessionKey)
+        token = getAuth(username, password)
 	homeId = getHomeId(token)
 	doRequest(token,homeId)
 

@@ -1,14 +1,23 @@
 <setup>
 <block title="Add new credentials" endpoint="storage/passwords" entity="_new">
+<text>Enter your tado.com username and password to collect yout tado data</text>
   <input field="name">
-    <label>Username</label>
+    <label>tado Username</label>
     <type>text</type>
   </input>
 
   <input field="password">
-    <label>Password</label>
+    <label>tado Password</label>
     <type>password</type>
   </input>
+</block>
 
+<block title="Disable tado Index?" endpoint="configs/conf-indexes" entity="tado">
+<text>It is recommneded you DO NOT disable the following index, however please talk to your Splunk admistrator if you are unsure.  Doing so will break all of the data models and dashboards until you update the destination index in inputs.conf and update the index name in the macro "tadoIndex"</text>
+	<input field="disabled">
+
+		<label>Disable tado Index</label>
+		<type>bool</type>
+	</input>
 </block>
 </setup>
