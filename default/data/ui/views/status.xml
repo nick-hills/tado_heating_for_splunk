@@ -1,0 +1,329 @@
+<form refresh="300" stylesheet="custom_decorations.css">
+  <label>Dashboard</label>
+  <search>
+    <query>`tadoIndex` sourcetype="tado:weather" weather=* | dedup sourcetype |table weather</query>
+    <progress>
+      <set token="value3">$result.weather$</set>
+      <set token="range3">$result.weather$</set>
+    </progress>
+  </search>
+  <fieldset submitButton="true" autoRun="true">
+    <input type="time" token="searchTime" searchWhenChanged="true">
+      <label>Time</label>
+      <default>
+        <earliest>-24h@h</earliest>
+        <latest>now</latest>
+      </default>
+    </input>
+  </fieldset>
+  <row>
+    <panel>
+      <title>tadoMode</title>
+      <viz type="tado.tado_panel">
+        <search>
+          <query>`tadoIndex`  sourcetype="tado:zone" |dedup sourcetype|eval icon=if(tadoMode="HOME", "home", "car")|eval colour=if(tadoMode="HOME", "#f6ab14", "#15ac4f")|table tadoMode icon colour</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="tado.tado_panel.colorBy">field_value</option>
+        <option name="tado.tado_panel.fillTarget">background</option>
+        <option name="tado.tado_panel.fixIcon">warning</option>
+        <option name="tado.tado_panel.icon">field_value</option>
+        <option name="tado.tado_panel.precision">0</option>
+        <option name="tado.tado_panel.showOption">1</option>
+        <option name="tado.tado_panel.staticColor">#555</option>
+        <option name="tado.tado_panel.useColors">true</option>
+        <option name="tado.tado_panel.useThousandSeparator">true</option>
+      </viz>
+    </panel>
+    <panel>
+      <title>Heating State</title>
+      <viz type="tado.tado_panel">
+        <search>
+          <query>`tadoIndex` heatingPercentage=*|dedup sourcetype |eval icon=if(heatingState="Heating Off","toggle-off","toggle-on")| eval colour=if(heatingState="Heating Off","#336699",if(heatingState="Heating On","#f6ab14","#cccccc"))| table heatingState icon colour</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="tado.tado_panel.colorBy">field_value</option>
+        <option name="tado.tado_panel.fillTarget">background</option>
+        <option name="tado.tado_panel.fixIcon">warning</option>
+        <option name="tado.tado_panel.icon">field_value</option>
+        <option name="tado.tado_panel.precision">0</option>
+        <option name="tado.tado_panel.showOption">1</option>
+        <option name="tado.tado_panel.staticColor">#555</option>
+        <option name="tado.tado_panel.useColors">true</option>
+        <option name="tado.tado_panel.useThousandSeparator">true</option>
+      </viz>
+    </panel>
+    <panel>
+      <title>Hot Water State</title>
+      <viz type="tado.tado_panel">
+        <search>
+          <query>`tadoIndex` sourcetype=tado:zone hotwaterState!=null |dedup sourcetype|eval icon=if(hotwaterState="Hot Water Off","toggle-off","toggle-on")| eval colour=if(hotwaterState="Hot Water Off","#38435a",if(hotwaterState="Hot Water On","#f6ab14","#cccccc"))| table hotwaterState icon colour</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="tado.tado_panel.colorBy">field_value</option>
+        <option name="tado.tado_panel.fillTarget">background</option>
+        <option name="tado.tado_panel.fixIcon">warning</option>
+        <option name="tado.tado_panel.icon">field_value</option>
+        <option name="tado.tado_panel.precision">0</option>
+        <option name="tado.tado_panel.showOption">1</option>
+        <option name="tado.tado_panel.staticColor">#555</option>
+        <option name="tado.tado_panel.useColors">true</option>
+        <option name="tado.tado_panel.useThousandSeparator">true</option>
+      </viz>
+    </panel>
+    <panel>
+      <title>Weather Conditions</title>
+      <html>
+        <div class="custom-result-value $range3$">
+        </div>
+      </html>
+    </panel>
+    <panel>
+      <title>Solar Intensity</title>
+      <chart>
+        <search>
+          <query>`tadoIndex` sourcetype="tado:weather" solarIntensityPercentage=*| dedup sourcetype |table solarIntensityPercentage</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.chart">radialGauge</option>
+        <option name="charting.chart.rangeValues">[0,50,70,100]</option>
+        <option name="charting.chart.style">minimal</option>
+        <option name="charting.gaugeColors">["0x6cb8ca","0xfac61d","0xf7912c"]</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Outside Temperature</title>
+      <viz type="tado.tado_panel">
+        <search>
+          <query>`tadoIndex` sourcetype="tado:weather" outsideTemperatureC=*  | dedup sourcetype |eval outsideTemp=round(outsideTemperatureC,1)|eval outsideTemp=outsideTemp+"c"|eval icon="tree"|eval colour="#006666"|dedup sourcetype|table outsideTemp icon colour</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="tado.tado_panel.colorBy">field_value</option>
+        <option name="tado.tado_panel.fillTarget">background</option>
+        <option name="tado.tado_panel.fixIcon">warning</option>
+        <option name="tado.tado_panel.icon">field_value</option>
+        <option name="tado.tado_panel.precision">0</option>
+        <option name="tado.tado_panel.showOption">1</option>
+        <option name="tado.tado_panel.staticColor">#555</option>
+        <option name="tado.tado_panel.useColors">true</option>
+        <option name="tado.tado_panel.useThousandSeparator">true</option>
+      </viz>
+    </panel>
+    <panel>
+      <title>Target Temperature</title>
+      <viz type="tado.tado_panel">
+        <search>
+          <query>`tadoIndex` targetTemperatureC=*|eval targetTemp=round(targetTemperatureC,1)|eval targetTemp=targetTemp+"c"|eval icon="crosshairs"|eval colour="#ff9933"|dedup sourcetype|table targetTemp icon colour</query>
+          <earliest>0</earliest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="tado.tado_panel.colorBy">field_value</option>
+        <option name="tado.tado_panel.fillTarget">background</option>
+        <option name="tado.tado_panel.fixIcon">warning</option>
+        <option name="tado.tado_panel.icon">field_value</option>
+        <option name="tado.tado_panel.precision">0</option>
+        <option name="tado.tado_panel.showOption">1</option>
+        <option name="tado.tado_panel.staticColor">#555</option>
+        <option name="tado.tado_panel.useColors">true</option>
+        <option name="tado.tado_panel.useThousandSeparator">true</option>
+      </viz>
+    </panel>
+    <panel>
+      <title>Inside Temperature</title>
+      <viz type="tado.tado_panel">
+        <search>
+          <query>`tadoIndex`  sourcetype="tado:zone" insideTemperatureC=*|dedup sourcetype|eval insideTemp=round(insideTemperatureC,1)|eval insideTemp=insideTemp+"c"|eval icon="building-o"|eval colour="#ffcc00"|dedup sourcetype|table insideTemp icon colour</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="tado.tado_panel.colorBy">field_value</option>
+        <option name="tado.tado_panel.fillTarget">background</option>
+        <option name="tado.tado_panel.fixIcon">warning</option>
+        <option name="tado.tado_panel.icon">field_value</option>
+        <option name="tado.tado_panel.precision">0</option>
+        <option name="tado.tado_panel.showOption">1</option>
+        <option name="tado.tado_panel.staticColor">#555</option>
+        <option name="tado.tado_panel.useColors">true</option>
+        <option name="tado.tado_panel.useThousandSeparator">true</option>
+      </viz>
+    </panel>
+    <panel>
+      <title>Humidity Level</title>
+      <viz type="tado.tado_panel">
+        <search>
+          <query>`tadoIndex` sourcetype="tado:zone" humidityPercentage=*|dedup sourcetype| eval humidity=round(humidityPercentage,1)|eval humidity=humidity+"%"|eval icon="tint"|eval colour="#0099cc"|table humidity icon colour</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="tado.tado_panel.colorBy">field_value</option>
+        <option name="tado.tado_panel.fillTarget">background</option>
+        <option name="tado.tado_panel.fixIcon">warning</option>
+        <option name="tado.tado_panel.icon">field_value</option>
+        <option name="tado.tado_panel.precision">0</option>
+        <option name="tado.tado_panel.showOption">1</option>
+        <option name="tado.tado_panel.staticColor">#555</option>
+        <option name="tado.tado_panel.useColors">true</option>
+        <option name="tado.tado_panel.useThousandSeparator">true</option>
+      </viz>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Outside Temperature</title>
+      <chart>
+        <search>
+          <query>`tadoIndex` (sourcetype="tado:weather" OR sourcetype="tado:weather") |timechart max("outsideTemperatureC") as "Outside Temperature" max(solarIntensityPercentage) as "Solar Intensity"</query>
+          <earliest>$searchTime.earliest$</earliest>
+          <latest>$searchTime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Temperature</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">1</option>
+        <option name="charting.axisY2.maximumNumber">110</option>
+        <option name="charting.axisY2.scale">linear</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.overlayFields">"Solar Intensity"</option>
+        <option name="charting.chart.showDataLabels">minmax</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">none</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Inside Temperature</title>
+      <chart>
+        <search>
+          <query>`tadoIndex` sourcetype="tado:zone" insideTemperatureC=*|timechart max(insideTemperatureC)  as "Inside Temperature" max(targetTemperatureC) as "Target Temperature"</query>
+          <earliest>$searchTime.earliest$</earliest>
+          <latest>$searchTime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Temperature</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">minmax</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Heating Demand</title>
+      <chart>
+        <search>
+          <query>`tadoIndex` heatingPercentage=* |timechart max(heatingPercentage) by sensorType</query>
+          <earliest>$searchTime.earliest$</earliest>
+          <latest>$searchTime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.visibility">collapsed</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.maximumNumber">110</option>
+        <option name="charting.axisY.minimumNumber">0</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">gaps</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">bottom</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Humidity Level</title>
+      <chart>
+        <search>
+          <query>`tadoIndex` sourcetype="tado:zone" humidityPercentage=*|timechart max(humidityPercentage)</query>
+          <earliest>$searchTime.earliest$</earliest>
+          <latest>$searchTime.latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">collapsed</option>
+        <option name="charting.axisTitleY.text">Humidity</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">line</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">connect</option>
+        <option name="charting.chart.showDataLabels">minmax</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">none</option>
+      </chart>
+    </panel>
+  </row>
+</form>

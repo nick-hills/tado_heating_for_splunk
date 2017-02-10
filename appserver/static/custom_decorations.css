@@ -1,0 +1,45 @@
+@font-face {
+	font-family: 'Weather';
+	src: url('./fonts/weather-icons-master/font/weathericons-regular-webfont.ttf');
+}
+
+.custom-result-value {
+    vertical-align: middle; 
+    font-size: 85px;
+    margin: 85px auto;
+    text-align: center;
+    font-weight: bold;
+    color: rgb(85, 85, 85);
+}
+.custom-result-value:before {
+    font-family: "Weather";
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    font-size: 110%;
+}
+
+.SUN.custom-result-value:before {
+    content: "\F00D";
+}
+.FOGGY.custom-result-value:before {
+    content: "\F021";
+}
+.NIGHT_CLOUDY.custom-result-value:before {
+    content: "\F086";
+}
+.CLOUDY_PARTLY.custom-result-value:before {
+    content: "\F002";
+}
+.CLOUDY_MOSTLY.custom-result-value:before {
+    content: "\F013";
+}
+.SCATTERED_RAIN.custom-result-value:before {
+    content: "\F01A";
+}
+.NIGHT_CLEAR.custom-result-value:before {
+    content: "\F02E";
+}
+.DRIZZLE.custom-result-value:before {
+    content: "\F017";
+}

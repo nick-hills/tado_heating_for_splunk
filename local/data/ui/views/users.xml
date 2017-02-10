@@ -1,0 +1,57 @@
+<dashboard>
+  <label>Users</label>
+  <row>
+    <panel>
+      <viz type="location_tracker_app.location_tracker">
+        <search>
+          <query>index=tado sourcetype="tado:users" |rename user{}.name as name|rename user{}.mobileDevices{}.location.atHome as atHome| rename  user{}.mobileDevices{}.location.bearingFromHome.degrees as bearing |rename user{}.mobileDevices{}.location.relativeDistanceFromHomeFence as distance| mvexpand user|eval temp=mvzip(mvzip(mvzip(name,atHome,"#"),bearing,"#"),distance,"#") | mvexpand temp | rex field=temp "(?&lt;name&gt;.*)#(?&lt;atHome&gt;.*)#(?&lt;bearing&gt;.*)#(?&lt;distance&gt;.*)" | fields - temp | eval latitude=51.1327564|eval longitude=-0.000266|lookup position latitude longitude bearing distance OUTPUT latitude2 longitude2|dedup latitude2 longitude2|table _time latitude2 longitude2 name</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="location_tracker_app.location_tracker.interval">3600</option>
+        <option name="location_tracker_app.location_tracker.showTraces">1</option>
+        <option name="location_tracker_app.location_tracker.staticIcon">none</option>
+        <option name="location_tracker_app.location_tracker.tileSet">openstreetmap_tiles</option>
+      </viz>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <search>
+          <query>index=tado sourcetype="tado:users" |dedup sourcetype|rename user{}.name as name|rename user{}.mobileDevices{}.location.atHome as atHome| rename  user{}.mobileDevices{}.location.bearingFromHome.degrees as bearing |rename user{}.mobileDevices{}.location.relativeDistanceFromHomeFence as distance| mvexpand user|eval temp=mvzip(mvzip(mvzip(name,atHome,"#"),bearing,"#"),distance,"#") | mvexpand temp | rex field=temp "(?&lt;name&gt;.*)#(?&lt;atHome&gt;.*)#(?&lt;bearing&gt;.*)#(?&lt;distance&gt;.*)" | fields - temp | table name atHome bearing distance</query>
+          <earliest>$earliest$</earliest>
+          <latest>$latest$</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>working</title>
+      <table>
+        <search>
+          <query>index=tado sourcetype="tado:users" |rename user{}.name as name|rename user{}.mobileDevices{}.location.atHome as atHome| rename  user{}.mobileDevices{}.location.bearingFromHome.degrees as bearing |rename user{}.mobileDevices{}.location.relativeDistanceFromHomeFence as distance| mvexpand user|eval temp=mvzip(mvzip(mvzip(name,atHome,"#"),bearing,"#"),distance,"#") | mvexpand temp | rex field=temp "(?&lt;name&gt;.*)#(?&lt;atHome&gt;.*)#(?&lt;bearing&gt;.*)#(?&lt;distance&gt;.*)" | fields - temp | eval latitude=51.1327564|eval longitude=-0.000266|lookup position latitude longitude bearing distance OUTPUT latitude2 longitude2|table _time name atHome bearing distance latitude2 longitude2</query>
+          <earliest>0</earliest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">cell</option>
+        <option name="percentagesRow">false</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+      </table>
+    </panel>
+  </row>
+</dashboard>
