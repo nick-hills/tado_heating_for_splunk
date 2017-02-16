@@ -12,6 +12,18 @@
   </input>
 </block>
 
+<block title="Enable a scripted input" endpoint="data/inputs/script" entity="%24SPLUNK_HOME%252Fetc%252Fapps%252FMySampleApp%252Fbin%252Fmyscript.sh">
+    <text>
+      &lt;i&gt;Specify the configuration for a single setting in a stanza.&lt;/i&gt;
+    </text>
+
+    <input field="interval">
+      <label>Specify the interval for [$name$] </label>
+      <type>text</type>
+    </input>
+
+  </block>
+
 <block title="Disable tado Index?" endpoint="configs/conf-indexes" entity="tado">
 <text>It is recommneded you DO NOT disable the following index (i.e. you should uncheck this box), however please talk to your Splunk admistrator if you are unsure. Disabling will break all of the data models and dashboards until you update the destination index in inputs.conf and update the index name in the macro "tadoIndex"</text>
 	<input field="disabled">

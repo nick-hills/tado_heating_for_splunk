@@ -1,11 +1,7 @@
-[app/install/is_configured]
+[views/status]
 version = 6.5.2
-modtime = 1486765879.079210000
+modtime = 1487109888.309825000
 
-[passwords/credential%3A%3Anick.hills%40gmail.com%3A]
+[macros/tadoIndex]
 version = 6.5.2
-modtime = 1486765879.030869000
-
-[indexes/tado]
-version = 6.5.2
-modtime = 1486765879.037521000
+modtime = 1487279702.152476000
